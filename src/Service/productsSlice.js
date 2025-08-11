@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { nanoid } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 import { fetchProductsMock } from './api';
 
 export const fetchProducts = createAsyncThunk(
@@ -19,9 +19,10 @@ const productsSlice = createSlice({
   },
   reducers: {
     addProduct: (state, action) => {
+      const newId = uuidv4();
       state.items.push({
         ...action.payload,
-        id: nanoid(),
+        id: newId
       });
     },
     editProduct: (state, action) => {
@@ -31,7 +32,7 @@ const productsSlice = createSlice({
       }
     },
     removeProduct: (state, action) => {
-      state.items = state.items.filter(product => product.id !== action.payload.id);
+      state.items = state.items.filter(product => product.id !== action.payload);
     },
   },
   extraReducers: (builder) => {
