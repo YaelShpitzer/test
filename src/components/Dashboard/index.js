@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 // import { increment, decrement, incrementByAmount } from './counterSlice';
 import DataGrid, { Editing } from 'devextreme-react/data-grid';
@@ -12,21 +12,29 @@ const columns = [
     {
         dataType: 'string',
         dataField: "name",
-        caption: "שם מוצר"
+        caption: "שם מוצר",
+        allowFiltering: true,
+        filterOperations: ['contains'],
+        allowHeaderFiltering: false,
     },
     {
         dataType: 'string',
         dataField: "category",
-        caption: "קטגוריה"
+        caption: "קטגוריה",
+        allowFiltering: false,
+        allowHeaderFiltering: true,
     },
     {
         dataType: 'number',
         dataField: "price",
-        caption: "מחיר"
+        caption: "מחיר",
+        allowFiltering: false,
+        sortOrder: 'asc',
     },
     {
         dataType: 'number',
         dataField: "stock",
+        allowFiltering: false,
         caption: "כמות במלאי"
     },
 ]
@@ -39,8 +47,8 @@ const Dashboard = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (status === 'idle') { 
-            dispatch(fetchProducts()); 
+        if (status === 'idle') {
+            dispatch(fetchProducts());
         }
     }, [status, dispatch]);
 
@@ -53,6 +61,8 @@ const Dashboard = () => {
             columns={columns}
             onRowDblClick={(e) => { setProduct(e.data); setIsShowPopup(true) }}
             style={{ margin: 'auto' }}
+            filterRow={{ visible: true, applyFilter: 'auto' }}
+             headerFilter={{ visible: true }} 
             onRowRemoving={(e) => { e.cancel = true; dispatch(removeProduct({ id: e.data.id })) }}
             width="95%" >
             <Editing
